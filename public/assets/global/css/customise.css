@@ -1,0 +1,26 @@
+.notifyjs-corner {
+    top: 80px !important;
+}
+body .dt-button:before {
+    font-size: unset !important;
+}
+.dataTables_wrapper .dataTables_paginate {
+    float: right !important;
+}
+.dataTables_filter {
+    width: 50%;
+    float: right;
+    text-align: right;
+}
+.dataTables_wrapper .dt-buttons {
+    float:left;
+    text-align:center;
+}
+.page-header.navbar .top-menu .navbar-nav>li.dropdown.open .dropdown-toggle {
+    background-color: white !important;
+}
+table.dataTable thead .sorting, 
+table.dataTable thead .sorting_asc, 
+table.dataTable thead .sorting_desc {
+    background : none !important;
+}

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title id="title"></title>
+  <link rel="shortcut icon" href="../assets/global/img/favicon.png" />
+  <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" -->
+  <!-- type="text/css" /> -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />-->
+  <!--<link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">-->
+
+
+
+  <!-- <link href="jquery.dataTables.min.css" rel="stylesheet" type="text/css" /> -->
+  <!-- <link href="dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" /> -->
+  <!-- <link
+    href="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.css" />
+  <link href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css" />
+  <script
+    src="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.js"></script>
+  <link
+    href="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.css" />
+  <link href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+  <script
+    src="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.js"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css"
+    rel="stylesheet" /> -->
+
+  <link href="../assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" />
+
+  <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="../assets/global/plugins/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+  <!-- Sweetalert CSS -->
+  <link href="../assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="../assets/global/plugins/clockface/css/clockface.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/css/components-md.min.css" rel="stylesheet" id="style_components" type="text/css" />
+  <link href="../assets/global/css/plugins-md.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/css/toastr.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/css/customise.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/layouts/layout4/css/layout.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/layouts/layout4/css/themes/default.min.css" rel="stylesheet" type="text/css" id="style_color" />
+  <link href="../assets/layouts/layout4/css/custom.min.css" rel="stylesheet" type="text/css" />
+
+  <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+  <!--&lt;!&ndash; END CSS &ndash;&gt;-->
+  <!-- BEGIN SCRIPTS -->
+  <script src="../assets/global/plugins/respond.min.js"></script>
+  <script src="../assets/global/scripts/custom.js"></script>
+  <script src="../assets/global/plugins/excanvas.min.js"></script>
+  <script src="../assets/global/plugins/ie8.fix.min.js"></script>
+  <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/moment.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js"
+    type="text/javascript"></script>
+
+  <script src="../assets/global/plugins/select2/js/select2.min.js"></script>
+
+  <script src="../assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/morris/raphael-min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/counterup/jquery.waypoints.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/counterup/jquery.counterup.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/horizontal-timeline/horizontal-timeline.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+  <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/moment.min.js" type="text/javascript"></script>
+  <script src="../assets/axios.min.js"></script>
+  <script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js"
+    type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"
+    type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"
+    type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
+    type="text/javascript"></script>
+  <script src="../assets/global/plugins/clockface/js/clockface.js" type="text/javascript"></script>
+  <script src="../assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
+  <script src="../assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
+  <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
+  <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
+  <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+  <script src="../assets/layouts/global/scripts/quick-nav.min.js" type="text/javascript"></script>
+  <script src="../assets/global/scripts/notify.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/sweetalert/dist/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="../assets/global/css/datatables-button.css" />
+
+  <link href="../assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/datatables/fixedHeader.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
+    type="text/css" />
+  <!-- END PAGE LEVEL PLUGINS -->
+  <!--<link href="assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet">-->
+  <!--<link rel="stylesheet" href="assets/css/datatables-button.css"/>-->
+
+
+  <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <link href="../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
+  <link href="../assets/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+  <!-- END PAGE LEVEL PLUGINS -->
+
+
+
+  <script src="../assets/axios.min.js"></script>
+  <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <script src="../assets/global/scripts/datatable.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
+    type="text/javascript"></script>
+  <!-- END PAGE LEVEL PLUGINS -->
+  <script src="../assets/axios.min.js"></script>
+
+  <!-- BEGIN PAGE LEVEL SCRIPTS -->
+  <script src="../assets/pages/scripts/table-datatables-responsive.min.js" type="text/javascript"></script>
+  <!-- END PAGE LEVEL SCRIPTS -->
+  <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <script src="../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+  <script src="../assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+  <!-- END PAGE LEVEL PLUGINS -->
+
+  <style>
+    .page-quick-sidebar-wrapper .page-quick-sidebar {
+      background: #21282e94;
+    }
+
+    .page-quick-sidebar-wrapper {
+      background: #21282e94;
+    }
+
+    .dashboard-stat.dashboard-stat-v2 .visual {
+      padding-top: 35px;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-stat .details .number {
+      padding-top: 20px;
+    }
+  </style>
+  <!-- END PAGE LEVEL SCRIPTS -->
+
+</head>
+
+<body class="page-container-bg-solid page-header-fixed page-sidebar-closed-hide-logo page-md page-footer-fixed">
+  <!-- BEGIN HEADER -->
+  <div class="page-header navbar navbar-fixed-top" style="background-color: #FFF">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+      <!-- BEGIN LOGO -->
+      <div class="page-logo">
+        <a id="dashboardHref">
+          <img src="../assets/global/img/logo.png" alt="EMatrix" style="width: 175px; margin: 3px;"
+            class="logo-default" />
+        </a>
+      </div>
+      <!-- END LOGO -->
+      <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+      <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+        data-target=".navbar-collapse">
+      </a>
+      <!-- END RESPONSIVE MENU TOGGLER -->
+      <!-- BEGIN PAGE TOP -->
+      <div class="page-top">
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <div class="top-menu">
+          <ul class="nav navbar-nav pull-right">
+            <!-- BEGIN INBOX DROPDOWN -->
+            <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+            <!-- END INBOX DROPDOWN -->
+            <li class="dropdown dropdown-user ">
+              <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                data-close-others="true">
+                <span class="username username-hide-on-mobile"> Welcome User </span>
+                <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
+                <img alt="" class="img-circle" src="" />
+              </a>
+              <!-- <ul class="dropdown-menu dropdown-menu-default">
+                <li id="viewTransactions">
+                </li>
+                <li>
+                  <a data-toggle="modal" href="#userUpdateModal">
+                    <i class="icon-user"></i> User Profile </a>
+                </li>
+                <li>
+                  <a data-toggle="modal" href="#changePasswordModal">
+                    <i class="icon-settings"></i> Change Password </a>
+                </li>
+                <li id="columnKeysLi" class="hidden">
+                  <a data-toggle="modal" href="#updateModal">
+                    <i class="icon-settings"></i> Update Column Keys </a>
+                </li>
+                <li>
+                  <a href="/logout">
+                    <i class="icon-key"></i>Log Out</a>
+                </li>
+              </ul> -->
+            </li>
+            <!-- BEGIN QUICK SIDEBAR TOGGLER Right top corner -->
+            <!-- <li class="dropdown dropdown-extended quick-sidebar-toggler" id="quickSidebarDiv" style="display: none">
+              <span class="sr-only">Toggle Quick Sidebar</span>
+              <i class="icon-logout"></i>
+            </li> -->
+            <!-- END QUICK SIDEBAR TOGGLER -->
+
+          </ul>
+        </div>
+        <!-- END TOP NAVIGATION MENU -->
+      </div>
+      <!-- END PAGE TOP -->
+    </div>
+    <!-- END HEADER INNER -->
+
+  </div>
+  <!-- END HEADER -->
+  <!-- BEGIN HEADER & CONTENT DIVIDER -->
+  <div class="clearfix"> </div>
+  <!-- END HEADER & CONTENT DIVIDER -->
+  <!-- BEGIN CONTAINER -->
+  <div class="page-container">
+    <div class="page-sidebar-wrapper">
+      <!-- END SIDEBAR -->
+      <!-- BEGIN CONTENT -->
+      <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div> {{{ yield }}} </div>
+      </div> <!-- BEGIN QUICK SIDEBAR -->
+      <a href="javascript:;" class="page-quick-sidebar-toggler">
+        <i class="icon-login"></i>
+      </a>
+      <div class="page-quick-sidebar-wrapper" style="color:white !important;" data-close-on-body-click="false">
+        <div class="page-quick-sidebar">
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="javascript:;"> Notifications
+                <span class="badge badge-danger" id="count"></span>
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active page-quick-sidebar-alerts" id="quick_sidebar_tab_2">
+              <div class="page-quick-sidebar-alerts-list">
+                <ul class="feeds list-items" id="notificationContent">
+
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END QUICK SIDEBAR -->
+    </div>
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer" id="footer" style="text-align: center !important;">
+      <div class="page-footer-inner" id="footerId"></div>
+      <div class="scroll-to-top">
+        <i class="icon-arrow-up"></i>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+  </div>
+
+</body>
+<!-- 
+<div id="userUpdateModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="closeBtnUserModal" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Update User</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="text" id="userFirstName" value="{{user.firstName}}" class="form-control input-sm"
+                placeholder="">
+              <label class="control-label">First Name</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="text" id="userLastName" value="{{user.lastName}}" class="form-control input-sm"
+                placeholder="">
+              <label class="control-label">Last Name</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="text" id="userUsername" value="{{user.username}}" class="form-control input-sm"
+                placeholder="" onkeypress="return avoidSpace(event)">
+              <label class="control-label">username</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="email" id="userEmail" value="{{user.email}}" class="form-control input-sm" placeholder="">
+              <label class="control-label">Email</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="text" id="userContact" value="{{user.contact}}" class="form-control input-sm" placeholder=""
+                onkeypress="return isNumberKey(event)">
+              <label class="control-label">Phone No.</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="updateUserDetails" class="btn green">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="changePasswordModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="password" id="oldPassword" class="form-control input-sm" placeholder="">
+              <label class="control-label">Old Password</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="password" id="newPassword" class="form-control input-sm" placeholder="">
+              <label class="control-label">New Password</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-md-line-input form-md-floating-label">
+              <input type="password" id="confirmPassword" class="form-control input-sm" placeholder="">
+              <label class="control-label">Confirm Password</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="changePassword" class="btn green">Change</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<script>
+  $(document).ready(() => {
+
+    $("#footerId").text(new Date().getUTCFullYear() + " ©  EMatrix. All rights reserved.")
+
+    // $('#updateUserDetails').on('click', function () {
+    //   if (detailsFormvalidation()) {
+    //     let newUser = {
+    //       firstName: $("#userFirstName").val(),
+    //       lastName: $("#userLastName").val(),
+    //       username: $("#userUsername").val(),
+    //       email: $("#userEmail").val(),
+    //       contact: $("#userContact").val()
+    //     }
+    //     axios.post('/dashboard/updateUser', newUser).then(function (response) {
+    //       if (response && response.data && response.data.resCode === '000') {
+    //         $("#userFirstName").val('')
+    //         $("#userLastName").val('')
+    //         $("#userUsername").val('')
+    //         $("#userEmail").val('')
+    //         $("#userContact").val('')
+    //         $('#userUpdateModal').modal('hide')
+    //         swal({
+    //           title: 'Success',
+    //           type: 'success',
+    //           text: response.data.resMessage
+    //         }, function () {
+    //           window.location.reload()
+    //         })
+    //       } else {
+    //         toastr.error(response.data.resMessage)
+    //       }
+    //     })
+    //   }
+    // })
+
+    // function detailsFormvalidation() {
+    //   if ($("#userFirstName").val().length <= 0) {
+    //     toastr.error('Please Enter First Name')
+    //     $("#userFirstName").focus()
+    //     return false
+    //   }
+    //   if ($("#userLastName").val().length <= 0) {
+    //     toastr.error('Please Enter Last Name')
+    //     $("#userLastName").focus()
+    //     return false
+    //   }
+    //   if ($("#userUsername").val().length < 6) {
+    //     toastr.error('Length should be atleat 6')
+    //     $("#userUsername").focus()
+    //     return false
+    //   }
+    //   if ($("#userEmail").val().length <= 0) {
+    //     toastr.error('Please Enter Email')
+    //     $("#userEmail").focus()
+    //     return false
+    //   }
+    //   if (!(/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/.test($("#userEmail").val()))) {
+    //     toastr.error('Please Enter Valid Email')
+    //     $("#userEmail").focus()
+    //     return false
+    //   }
+    //   if ($("#userContact").val().length <= 0) {
+    //     toastr.error('Please Enter Phone No.')
+    //     $("#userContact").focus()
+    //     return false
+    //   }
+    //   return true
+    // }
+
+    // $('#changePassword').on('click', function () {
+    //   if (passwordFormvalidation()) {
+    //     let passwordObject = {
+    //       oldPassword: $("#oldPassword").val(),
+    //       newPassword: $("#newPassword").val()
+    //     }
+    //     console.log(passwordObject)
+    //     axios.post('/changePassword', passwordObject).then(function (response) {
+    //       console.log('IN IN INSIDE')
+    //       if (response && response.data && response.data.resCode === '000') {
+    //         $("#oldPassword").val('')
+    //         $("#newPassword").val('')
+    //         $("#confirmPassword").val('')
+    //         $('#changePasswordModal').modal('hide')
+    //         swal({
+    //           title: 'Success',
+    //           type: 'success',
+    //           text: response.data.resMessage
+    //         })
+    //       } else {
+    //         toastr.error(response.data.resMessage)
+    //       }
+    //     })
+    //   }
+    // })
+
+    // function passwordFormvalidation() {
+    //   if ($("#oldPassword").val().length < 6) {
+    //     toastr.error('Length should be atleat 6')
+    //     $("#oldPassword").focus()
+    //     return false
+    //   }
+    //   if ($("#newPassword").val().length < 6) {
+    //     toastr.error('Length should be atleat 6')
+    //     $("#newPassword").focus()
+    //     return false
+    //   }
+    //   if ($("#confirmPassword").val().length === 0) {
+    //     toastr.error('Enter Confirm Password')
+    //     $("#confirmPassword").focus()
+    //     return false
+    //   }
+    //   if ($("#confirmPassword").val() !== $("#newPassword").val()) {
+    //     toastr.error('Password does not match')
+    //     $("#confirmPassword").focus()
+    //     return false
+    //   }
+    //   return true
+    // }
+
+  })
+</script>
+
+</html>

@@ -1,0 +1,605 @@
+<html><head>
+	<title>Shearwall Design</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+	table > thead > tr > th
+	{
+		padding: 2px !important;
+		text-align: center;
+	}
+	table > thead > tr > th
+	{
+		font-size: 12px;
+		background: whitesmoke;
+	}
+	table > tbody > tr > td
+	{
+		font-size: 11px;
+		font-weight: 400;
+		padding: 2px !important;
+		text-align: center;
+	}
+	tfoot
+	{
+		background: whitesmoke;
+		font-size: 11px;
+	}
+	table > tfoot > tr > td
+	{
+		border-top: 0 !important;
+		padding: 2px !important;
+
+	}
+	.blue
+	{
+		color: #099ad1;
+	}
+	.greyBackground
+	{
+		background: grey;
+		color: white;
+	}
+	.orangeBackground
+	{
+		background: #fcd5b4;
+	}
+	.lightgreyBackground
+	{
+		background: lightgrey;
+	}
+	.whitesmokeBackground
+	{
+		background: whitesmoke;
+	}
+	.rightSide > table > tbody > tr > td
+	{
+		text-align: left;
+		font-weight: bold;
+	}
+	input
+	{
+		text-align: center;
+		border: none;
+		width: 100px;
+	}
+</style>		
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-7">
+				<img src="head.png" class="img-responsive">
+				<!-- First table -->
+				<table class="table">
+					<thead>
+						<tr style="
+    font-size: 11px;
+">
+							<th colspan="6" class="text-center greyBackground" style="
+    font-size: 12px;
+">Dimension and Material Properties</th>
+						</tr>
+						<tr>
+							<th>Length(L)</th>
+							<th>Height(H)</th>
+							<th>Thickness</th>
+							<th>fck</th>
+							<th>fymain</th>
+							<th>fys</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>mm</td>
+							<td>mm</td>
+							<td>mm</td>
+							<td>N/mm2</td>
+							<td>N/mm2</td>
+							<td>N/mm2</td>
+						</tr>
+						<tr>
+							<td><input type="text" readonly="" value="234" name=""></td>
+							<td><input type="text" readonly="" value="234" name=""></td>
+							<td><input type="text" readonly="" value="234" name=""></td>
+							<td><input type="text" readonly="" value="23424" name=""></td>
+							<td><input type="text" readonly="" value="21354" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- 2nd Table -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="6" class="text-center greyBackground" style="
+    font-size: 12px;
+">Priliminary Vertical Reinforcement Details(Ast)</th>
+						</tr>
+						<tr>
+							<th>Bar Dia</th>
+							<th>Spacing</th>
+							<th>Hoop Dia.</th>
+							<th>Clear Cover</th>
+							<th>%steel</th>
+							<th>D/C <small>Ratio MAX</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="
+">
+							<td style="
+    font-size: 8px;
+">mm</td>
+							<td style="
+    font-size: 8px;
+">mm</td>
+							<td style="
+    font-size: 8px;
+">mm</td>
+							<td style="
+    font-size: 8px;
+">mm</td>
+							<td style="
+    font-size: 8px;
+">17 rows</td>
+							<td style="
+    font-size: 8px;
+"></td>
+						</tr>
+						<tr>
+							<td><input type="text" value="2134" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+							<td><input type="text" readonly="" value="2134" name=""></td>
+						</tr>
+					</tbody><tfoot>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="2">Governing Combo</td>
+							<td colspan="2">1.5D-1.5W1</td>
+							<td>Web steel assumed</td>
+							<td>0.26%</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="4" style="
+    font-size: 10px;
+">Provided steel is greater than 0.25% hence OK</td>
+							<td>Actual steel % in web</td>
+							<td>0.26%</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="6">Vert. Reinforcement is greater than Hori. Reinforcement hence OK</td>
+						</tr>
+					</tfoot>
+					
+				</table>
+
+				<!-- 3rd Table -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="6" class="text-center greyBackground" style="
+    font-size: 12px;
+">Priliminary Horizontal Reinforcement Details(Ast) in two layers</th>
+						</tr>
+						<tr>
+							<th>tc-Enhanced</th>
+							<th>tv</th>
+							<th>Ah required</th>
+							<th>Spacing</th>
+							<th>Spacing</th>
+							<th>%steel</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="
+    font-size: 8px;
+">N/mm2</td>
+							<td style="
+    font-size: 8px;
+">N/mm2</td>
+							<td style="
+    font-size: 8px;
+">mm2/mm</td>
+							<td style="
+    font-size: 8px;
+">mm(req.)</td>
+							<td style="
+    font-size: 8px;
+">mm(prov.)</td>
+							<td style="
+    font-size: 8px;
+">0.92mm2/mm</td>
+						</tr>
+						<tr>
+							<td class="blue">0.433</td>
+							<td class="blue">4050</td>
+							<td class="blue">350</td>
+							<td class="blue">60</td>
+							<td>500</td>
+							<td class="blue">415</td>
+						</tr>
+					</tbody><tfoot>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="2">Governing Combo</td>
+							<td colspan="2">1.5D-1.5W1</td>
+							<td>Related Vu</td>
+							<td>1898.4146 kN</td>
+						</tr>
+						<tr>
+							<td colspan="6" style="
+    font-size: 10px;
+">Required spaceing less than 111 mm Hence revise</td>
+						</tr>
+						<tr>
+							<td colspan="6" style="
+    font-size: 10px;
+">'tcmax' is greater than 'tv' Hence OK</td>
+						</tr>
+						
+					</tfoot>
+					
+				</table>
+
+				<!-- 4th Table  contains 2 tables-->
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="6" class="text-center greyBackground" style="
+    font-size: 12px;
+">Boundary zone calculations</th>
+						</tr>
+						<tr>
+							<th>Left Boundry</th>
+							<th>Steel <sub>req. comp</sub></th>
+							<th>Steel <sub>req. ten</sub></th>
+							<th>Bdr (L)<sub>prov.</sub></th>
+							<th>Bar rows</th>
+							<th>Steel <sub>prov.</sub></th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr style="
+    font-size: 8px;
+">
+							<td style="
+    font-size: 8px;
+">DESIGN AS</td>
+							<td>0.264%</td>
+							<td>4050%</td>
+							<td>mm</td>
+							<td>In Boundary</td>
+							<td>mm<sup>2</sup></td>
+						</tr>
+						<tr>
+							<td class="bg-warning">USER LEFT</td>
+							<td>370</td>
+							<td>354</td>
+							<td>235</td>
+							<td>354</td>
+							<td>24</td>
+						</tr>
+
+					</tbody>
+				</table>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Right Boundry</th>
+							<th>Steel <sub>req. comp</sub></th>
+							<th>Steel <sub>req. ten</sub></th>
+							<th>Bdr (L)<sub>prov.</sub></th>
+							<th>Bar rows</th>
+							<th>Steel <sub>prov.</sub></th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td>DESIGN AS</td>
+							<td>0.264%</td>
+							<td>4050%</td>
+							<td>mm</td>
+							<td>In Boundary</td>
+							<td>mm<sup>2</sup></td>
+						</tr>
+						<tr>
+							<td class="bg-info">USER RIGHT</td>
+							<td>370</td>
+							<td>354</td>
+							<td>235</td>
+							<td>354</td>
+							<td>24</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="4">Governing Combo for Left Boundry Zone (Compression)</td>
+							<td colspan="2">1.5D-1.5S4</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="3"></td>
+							<td>(Tension)</td>
+							<td colspan="2">0.8D-1.5S4</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="4">Governing Combo for Right Boundry Zone (Compression)</td>
+							<td>0.8D-1.5S4</td>
+							<td></td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="3"></td>
+							<td>(Tension)</td>
+							<td colspan="2">0.8D-1.5S4</td>
+						</tr>
+					</tfoot>
+				</table>
+
+				<!-- 5th table -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="6" class="text-center greyBackground">Special Confining Reinforcement (Left)</th>
+						</tr>
+						<tr>
+							<th>Hoop Dia</th>
+							<th>h</th>
+							<th>Spacing</th>
+							<th>A<sub>vh</sub> req.</th>
+							<th>A<sub>vh</sub> prov.</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>mm</td>
+							<td>mm</td>
+							<td>mm</td>
+							<td>mm<sup>2</sup></td>
+							<td>mm<sup>2</sup></td>
+						</tr>
+						<tr>
+							<td>3000</td>
+							<td>4050</td>
+							<td>350</td>
+							<td>60</td>
+							<td>500</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 6th table -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="6" class="text-center greyBackground">Special Confining Reinforcement (Right)</th>
+						</tr>
+						<tr>
+							<th>Hoop Dia</th>
+							<th>h</th>
+							<th>Spacing</th>
+							<th>A<sub>vh</sub> req.</th>
+							<th>A<sub>vh</sub> prov.</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>mm</td>
+							<td>mm</td>
+							<td>mm</td>
+							<td>mm<sup>2</sup></td>
+							<td>mm<sup>2</sup></td>
+						</tr>
+						<tr>
+							<td>3000</td>
+							<td>4050</td>
+							<td>350</td>
+							<td>60</td>
+							<td>500</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="5">Provided hoop size for left zone is greater than required hence OK</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td colspan="5">Provided hoop size for right zone is greater than required hence OK</td>
+						</tr>
+						<tr style="
+    font-size: 10px;
+">
+							<td></td>
+							<td></td>
+							<td colspan="2" class="text-center">fys for confinement in N/mm2</td>
+							<td class="text-center">500</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+
+			<div class="col-md-5 rightSide">
+				<table class="table table-bordered table-striped">
+					<tbody>
+						<tr>
+							<td>DATA ENTERED BY</td>
+							<td></td>
+							<td colspan="3">Report Generated On
+								<span style="margin-left: 30px;">09/02/2019</span>
+								<span style="margin-left: 30px;">(1:02:01)</span>
+							</td>
+						</tr>
+						<tr>
+							<td>Pier Labels as per Etabs</td>
+							<td class="orangeBackground">6</td>
+							<td>Project Name</td>
+							<td class="orangeBackground" colspan="2">AQIILA</td>
+						</tr>
+						<tr>
+							<td><b>Pier Labels as per Schdule</b></td>
+							<td>LWS</td>
+							<td>Lower Story (START)</td>
+							<td>BS2 FLR LVL</td>
+							<td>Developed By Ematrix</td>
+						</tr>
+						<tr>
+							<td><b>Story Label (SINGLE)</b></td>
+							<td class="orangeBackground">OFF 10 LVL</td>
+							<td>Upper Story (END)</td>
+							<td class="orangeBackground">OFF 05 LVL</td>
+							<td>Version <span style="color: red">2018-TRIAL</span></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="col-md-9 bg-info">
+					
+				</div>
+				<div class="col-md-3">
+					<table class="table">
+						<tbody>
+							<tr>
+								<td colspan="2">Overall Wall Height</td>
+							</tr>
+							<tr>
+								<td>meter</td>
+								<td>class</td>
+							</tr>
+							<tr>
+								<td class="orangeBackground">4.12</td>
+								<td>Intermediate</td>
+							</tr>
+							<tr><td class="lightgreyBackground" colspan="2">(P<sub>v</sub>) <sub>net,min</sub></td></tr>
+							<tr><td colspan="2">0.002</td></tr>
+							<tr><td class="lightgreyBackground" colspan="2">(p<sub>h</sub>) <sub>min</sub></td></tr>
+							<tr><td colspan="2">0.0025</td></tr>
+							<tr><td class="lightgreyBackground" colspan="2">Min Bar Rows</td></tr>
+							<tr><td colspan="2">Nos.</td></tr>
+							<tr><td colspan="2">5</td></tr>
+							<tr><td colspan="2" class="lightgreyBackground">Cofine Bar Spacing</td></tr>
+							<tr><td colspan="2">mm</td></tr>
+							<tr><td colspan="2" class="orangeBackground">100</td></tr>
+							<tr><td colspan="2" class="lightgreyBackground">UnCofine %</td></tr>
+							<tr><td colspan="2">%</td></tr>
+							<tr><td colspan="2">~0.25%</td></tr>
+							<tr><td colspan="2" class="lightgreyBackground">PT/PC Max</td></tr>
+							<tr><td colspan="2">%</td></tr>
+							<tr><td colspan="2" class="orangeBackground">2.00%</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="col-md-12">
+					<table class="table">
+						<thead>
+							<tr>
+								<th colspan="7" class="text-center greyBackground">Design Output</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="lightgreyBackground">
+								<td>Bending Axis</td>
+								<td colspan="2">D/C Ratio</td>
+								<td>Pu</td>
+								<td>Mu-design</td>
+								<td>p<sub>uR</sub></td>
+								<td>M<sub>uR</sub></td>
+							</tr>
+							<tr class="whitesmokeBackground">
+								<td>UniAxial <sub>major</sub></td>
+								<td colspan="2">0.248</td>
+								<td>kN</td>
+								<td>kN-m</td>
+								<td>kN</td>
+								<td>kN-m</td>
+							</tr>
+							<tr>
+								<td class="text-left" colspan="3">Combo 0.9D+1.5S4</td>
+								<td>-320</td>
+								<td>208.5</td>
+								<td>-211</td>
+								<td>210.33</td>
+							</tr>
+
+							<tr class="lightgreyBackground">
+								<td>Bending Axis</td>
+								<td colspan="2">D/C Ratio</td>
+								<td>Pu</td>
+								<td>Mu-design</td>
+								<td>p<sub>uR</sub></td>
+								<td>M<sub>uR</sub></td>
+							</tr>
+							<tr class="whitesmokeBackground">
+								<td>UniAxial <sub>minor</sub></td>
+								<td colspan="2">0.248</td>
+								<td>kN</td>
+								<td>kN-m</td>
+								<td>kN</td>
+								<td>kN-m</td>
+							</tr>
+							<tr>
+								<td class="text-left" colspan="3">Combo 0.9D+1.5S4</td>
+								<td>-320</td>
+								<td>208.5</td>
+								<td>-211</td>
+								<td>210.33</td>
+							</tr>
+
+							<tr class="lightgreyBackground">
+								<td>Bending Axis</td>
+								<td>D/C Ratio</td>
+								<td>Pu</td>
+								<td>Mu3</td>
+								<td>M<sub>uR-3</sub></td>
+								<td>Mu2-Design</td>
+								<td>M<sub>uR-2</sub></td>
+							</tr>
+							<tr class="whitesmokeBackground">
+								<td>Bi-Axial</td>
+								<td>0.248</td>
+								<td>kN</td>
+								<td>kN-m</td>
+								<td>kN-m</td>
+								<td>kN-m</td>
+								<td>kN-m</td>
+							</tr>
+							<tr>
+								<td class="text-left" colspan="2">Combo 0.9D+1.5S4</td>
+								<td>1666.3</td>
+								<td>-208.5</td>
+								<td>-211</td>
+								<td>210.33</td>
+								<td>479.55</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body></html>
