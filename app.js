@@ -19,7 +19,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json({ limit: '100 mb' }))
 app.use(bodyParser.urlencoded({ extended: false, limit: '100 mb' }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static('public'))
 
 
 app.use('/', require('./routes/index'))
