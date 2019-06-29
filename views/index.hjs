@@ -248,15 +248,35 @@
                     $('#uploadpdfFile').text('Upload pdf file');
                     $('#uploadpdfFile').prop('disabled', false);
                     if (response.resCode && response.resCode === '000') {
-                      // window.open(response.resData, '_blank')
                       let data = response.resData
-                      $('#date').val(data[41].str)
-                      $('#broker').val(data[6].str)
-                      $('#cnnum').val(data[43].str)
-                      let y = 328.7128
+                      // console.log(data)
+                      data = _.filter(data, function (obj) {
+                        if (!(obj.str == '' || obj.str == ' ')) {
+                          return obj
+                        }
+                      })
+                      console.log(data)
+                      let indexBroker = _.findIndex(data, function (obj) {
+                        return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
+                      })
+                      let indexDate = _.findIndex(data, function (obj) {
+                        return obj.str == 'Trade Date'
+                      })
+                      let indexCnnum = _.findIndex(data, function (obj) {
+                        return obj.str == 'Contract Note No.'
+                      })
+                      let setIndex = _.findIndex(data, function (obj) {
+                        return obj.str == 'Settlement Number'
+                      })
+                      $('#date').val(data[indexDate - 1].str)
+                      $('#broker').val(data[indexBroker - 1].str)
+                      $('#cnnum').val(data[indexCnnum - 2].str)
+                      $('#tableBody').html('')
+                      let y = data[setIndex + 1].y
+                      console.log(y)
                       let increment = 12.24
                       while (true) {
-                        selectedData = _.filter(data, function (obj) {
+                        let selectedData = _.filter(data, function (obj) {
                           if (obj.y == y) {
                             return obj
                           }
@@ -265,7 +285,7 @@
                         y += increment
                         y = Number(y.toFixed(4))
                         let name = selectedData[5].str
-                        let date = data[41].str
+                        let date = data[indexDate - 1].str
                         let transaction = Number(selectedData[2].str) < 0 ? 'Sell' : 'Buy'
                         let quantity = Math.abs(Number(selectedData[2].str))
                         let price = Math.abs(Number(selectedData[1].str))
