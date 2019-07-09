@@ -65,6 +65,10 @@
     font-size: 13px !important;
     font-weight: 400 !important;
   }
+
+  .last_row {
+    margin-top: 30px;
+  }
 </style>
 
 <div class="row">
@@ -176,6 +180,44 @@
                             </tbody>
                           </table>
                         </div>
+                        <div class="row last_row">
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="stt" class="form-control">
+                              <label for="stt">STT</label>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="stamp" class="form-control">
+                              <label for="stamp">Stamp Charges</label>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="other" class="form-control">
+                              <label for="other">Other Charges</label>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="gst" class="form-control">
+                              <label for="gst">GST/S. Tax</label>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="trans" class="form-control">
+                              <label for="trans">Trans. Charges</label>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <input type="text" readonly id="total" class="form-control">
+                              <label for="total" class="font-weight-bold">Total Amount (Receivable)</label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                   </div>
                 </div>
@@ -197,6 +239,7 @@
         type="text/javascript"></script>
       <!-- END PAGE LEVEL PLUGINS -->
       <script src="../assets/axios.min.js"></script>
+      <script src="../assets/lodash.js"></script>
       <!-- <script -->
       <!-- src="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.js"></script> -->
       <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -268,9 +311,24 @@
                       let setIndex = _.findIndex(data, function (obj) {
                         return obj.str == 'Settlement Number'
                       })
+                      let charges = _.keys(_.pickBy(data, { str: 'Total (Net)' }))
+                      let indexSTT = Number(charges[0])
+                      let indexGST = Number(charges[1])
                       $('#date').val(data[indexDate - 1].str)
                       $('#broker').val(data[indexBroker - 1].str)
                       $('#cnnum').val(data[indexCnnum - 2].str)
+
+                      $('#stt').val(data[indexSTT - 2].str)
+                      $('#stamp').val(data[indexSTT - 5].str)
+                      let otherCharges = data[indexSTT - 7].str == 'NSE' ? data[indexSTT - 4].str : Number(data[indexSTT - 4].str) + Number(data[indexSTT - 6].str)
+                      $('#other').val(otherCharges)
+
+                      $('#trans').val(data[indexSTT - 3].str)
+                      let gstCharges = Math.abs(Number(data[indexGST - 2].str) + Number(data[indexGST - 3].str) + Number(data[indexGST - 4].str))
+                      $('#gst').val(gstCharges)
+
+                      $('#total').val(Math.abs(Number(data[indexGST - 6].str.replace(',', ''))))
+
                       $('#tableBody').html('')
                       let y = data[setIndex + 1].y
                       console.log(y)
