@@ -117,6 +117,23 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+                          <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group form-md-line-input">
+                              <input type="text" id="password" class="form-control">
+                              <label for="password">Password (Optional)</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group form-md-line-input form-md-floating-label">
+                              <select id="brokerType" class="form-control">
+                                <option value="1">ADITYA BIRLA</option>
+                                <option value="2">SMC GLOBAL</option>
+                              </select>
+                              <label for="brokerType">Broker Type</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-md-offset-4">
                             <div class="form-group text-center">
                               <button class="btn btn-primary full-width" id="uploadpdfFile" type="button"
                                 name="action">upload pdf file
@@ -172,7 +189,7 @@
                               <th>Date</th>
                               <th>Quantity</th>
                               <th>Price</th>
-                              <th>Brokerage</th>
+                              <th>Brokerage/Unit</th>
                               <th>Amount</th>
                               <th>Comment</th>
                             </thead>
@@ -238,7 +255,6 @@
       <script src="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
         type="text/javascript"></script>
       <!-- END PAGE LEVEL PLUGINS -->
-      <script src="../assets/axios.min.js"></script>
       <script src="../assets/lodash.js"></script>
       <!-- <script -->
       <!-- src="https://cdn.datatables.net/t/dt/jszip-2.5.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2,b-print-1.1.2/datatables.min.js"></script> -->
@@ -288,80 +304,188 @@
                   contentType: false,
                   success: function (response) {
                     // console.log(response)
-                    $('#uploadpdfFile').text('Upload pdf file');
-                    $('#uploadpdfFile').prop('disabled', false);
                     if (response.resCode && response.resCode === '000') {
-                      let data = response.resData
-                      // console.log(data)
-                      data = _.filter(data, function (obj) {
-                        if (!(obj.str == '' || obj.str == ' ')) {
-                          return obj
-                        }
-                      })
-                      console.log(data)
-                      let indexBroker = _.findIndex(data, function (obj) {
-                        return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
-                      })
-                      let indexDate = _.findIndex(data, function (obj) {
-                        return obj.str == 'Trade Date'
-                      })
-                      let indexCnnum = _.findIndex(data, function (obj) {
-                        return obj.str == 'Contract Note No.'
-                      })
-                      let setIndex = _.findIndex(data, function (obj) {
-                        return obj.str == 'Settlement Number'
-                      })
-                      let charges = _.keys(_.pickBy(data, { str: 'Total (Net)' }))
-                      let indexSTT = Number(charges[0])
-                      let indexGST = Number(charges[1])
-                      $('#date').val(data[indexDate - 1].str)
-                      $('#broker').val(data[indexBroker - 1].str)
-                      $('#cnnum').val(data[indexCnnum - 2].str)
+                      axios.post('/extractData', { password: $('#pdfPassword').val(), brokerType: $('#brokerType :selected').val() }).then(function (res) {
+                        $('#uploadpdfFile').text('Upload pdf file');
+                        $('#uploadpdfFile').prop('disabled', false);
+                        if (res.data.resCode && res.data.resCode === '000') {
+                          let data = res.data.resData
+                          data = _.filter(data, function (obj) {
+                            if (!(obj.str == '' || obj.str == ' ')) {
+                              return obj
+                            }
+                          })
+                          console.log(data)
+                          if ($('#brokerType :selected').val() == 1) {
+                            let indexBroker = _.findIndex(data, function (obj) {
+                              return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
+                            })
+                            let indexDate = _.findIndex(data, function (obj) {
+                              return obj.str == 'Trade Date'
+                            })
+                            let indexCnnum = _.findIndex(data, function (obj) {
+                              return obj.str == 'Contract Note No.'
+                            })
+                            let setIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'Settlement Number'
+                            })
+                            let charges = _.keys(_.pickBy(data, { str: 'Total (Net)' }))
+                            let indexSTT = Number(charges[0])
+                            let indexGST = Number(charges[1])
+                            $('#date').val(data[indexDate - 1].str)
+                            $('#broker').val(data[indexBroker - 1].str)
+                            $('#cnnum').val(data[indexCnnum - 2].str)
+                            $('#stt').val(data[indexSTT - 2].str)
+                            $('#stamp').val(data[indexSTT - 5].str)
+                            let otherCharges = data[indexSTT - 7].str == 'NSE' ? data[indexSTT - 4].str : Number(data[indexSTT - 4].str) + Number(data[indexSTT - 6].str)
+                            $('#other').val(otherCharges)
+                            $('#trans').val(data[indexSTT - 3].str)
+                            let gstCharges = Math.abs(Number(data[indexGST - 2].str) + Number(data[indexGST - 3].str) + Number(data[indexGST - 4].str))
+                            $('#gst').val(gstCharges)
+                            $('#total').val(Math.abs(Number(data[indexGST - 6].str.replace(',', ''))))
+                            $('#tableBody').html('')
+                            let y = data[setIndex + 1].y
+                            console.log(y)
+                            let increment = 12.24
+                            while (true) {
+                              let selectedData = _.filter(data, function (obj) {
+                                if (obj.y == y) {
+                                  return obj
+                                }
+                              })
+                              if (selectedData.length < 2) { break; }
+                              y += increment
+                              y = Number(y.toFixed(4))
+                              let name = selectedData[5].str
+                              let date = data[indexDate - 1].str
+                              let transaction = Number(selectedData[2].str) < 0 ? 'Sell' : 'Buy'
+                              let quantity = Math.abs(Number(selectedData[2].str))
+                              let price = Math.abs(Number(selectedData[1].str))
+                              // console.log(selectedData[0].str.replace(',', ''))
+                              let amount = Math.abs(Number(selectedData[0].str.replace(',', '')))
+                              $('#tableBody').append(`
+                                <tr>
+                                  <td>${transaction}</td>
+                                  <td>${name}</td>
+                                  <td>${date}</td>
+                                  <td>${quantity}</td>
+                                  <td>${price}</td>
+                                  <td></td>
+                                  <td>${amount}</td>
+                                  <td></td>
+                                </tr>
+                              `)
+                            }
+                          } else if ($('#brokerType :selected').val() == 2) {
+                            let indexBroker = _.findIndex(data, function (obj) {
+                              return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
+                            })
+                            let indexDate = _.findIndex(data, function (obj) {
+                              return obj.str == 'Trade Date'
+                            })
+                            let indexCnnum = _.findIndex(data, function (obj) {
+                              return obj.str == 'Contract Note No.'
+                            })
+                            let sstIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'STT'
+                            })
+                            let brokerageIndex = _.findLastIndex(data, function (obj) {
+                              return obj.str == 'Brokerage'
+                            })
+                            let transIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'Transaction Charges'
+                            })
+                            let stampIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'Stamp Duty'
+                            })
+                            let otherIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'Taxable value of supply'
+                            })
+                            let gstIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'CGST@9%'
+                            })
+                            let amountIndex = _.findIndex(data, function (obj) {
+                              return obj.str == 'Net amount'
+                            })
 
-                      $('#stt').val(data[indexSTT - 2].str)
-                      $('#stamp').val(data[indexSTT - 5].str)
-                      let otherCharges = data[indexSTT - 7].str == 'NSE' ? data[indexSTT - 4].str : Number(data[indexSTT - 4].str) + Number(data[indexSTT - 6].str)
-                      $('#other').val(otherCharges)
+                            $('#date').val(data[indexDate + 1].str)
+                            $('#cnnum').val(data[indexCnnum + 1].str)
+                            $('#broker').val(data[indexBroker + 2].str)
 
-                      $('#trans').val(data[indexSTT - 3].str)
-                      let gstCharges = Math.abs(Number(data[indexGST - 2].str) + Number(data[indexGST - 3].str) + Number(data[indexGST - 4].str))
-                      $('#gst').val(gstCharges)
+                            let initialRow = _.findIndex(data, function (obj) {
+                              return obj.str == 'MTF'
+                            })
 
-                      $('#total').val(Math.abs(Number(data[indexGST - 6].str.replace(',', ''))))
+                            let x = 13.9
+                            let y = data[initialRow + 2].y
+                            $('#tableBody').html('')
+                            while (true) {
+                              let rowIndex = _.findIndex(data, function (obj) {
+                                return (obj.x == 13.9 && obj.y == y)
+                              })
+                              let nextObj10 = _.find(data, function (obj) {
+                                return (obj.x == x && obj.y == y + 10)
+                              })
+                              let nextObj16 = _.find(data, function (obj) {
+                                return (obj.x == x && obj.y == y + 16)
+                              })
+                              let nextObj20 = _.find(data, function (obj) {
+                                return (obj.x == x && obj.y == y + 20)
+                              })
+                              let nextObj26 = _.find(data, function (obj) {
+                                return (obj.x == x && obj.y == y + 26)
+                              })
 
-                      $('#tableBody').html('')
-                      let y = data[setIndex + 1].y
-                      console.log(y)
-                      let increment = 12.24
-                      while (true) {
-                        let selectedData = _.filter(data, function (obj) {
-                          if (obj.y == y) {
-                            return obj
+                              console.log('ROW INDEX => ', rowIndex)
+                              let name = data[rowIndex + 4].str
+                              rowIndex = data[rowIndex + 4].x == data[rowIndex + 5].x ? rowIndex + 1 : rowIndex
+                              console.log(name)
+                              console.log(nextObj10, nextObj16, nextObj20, nextObj26)
+                              $('#tableBody').append(`
+                                <tr>
+                                  <td>${data[rowIndex + 5].str}</td>
+                                  <td>${name}</td>
+                                  <td>${data[indexDate + 1].str}</td>
+                                  <td>${data[rowIndex + 6].str}</td>
+                                  <td>${data[rowIndex + 8].str}</td>
+                                  <td>${data[rowIndex + 9].str}</td>
+                                  <td>${Math.abs(Number(data[rowIndex + 11].str))}</td>
+                                  <td></td>
+                                </tr>
+                              `)
+
+                              if (nextObj10 != undefined && nextObj10.str != 'Description') {
+                                y = y + 10
+                              } else if (nextObj16 != undefined && nextObj16.str != 'Description') {
+                                y = y + 16
+                              } else if (nextObj20 != undefined && nextObj20.str != 'Description') {
+                                y = y + 20
+                              } else if (nextObj26 != undefined && nextObj26.str != 'Description') {
+                                y = y + 26
+                              } else {
+                                break
+                              }
+                            }
+                            $('#stt').val(data[sstIndex + 2].str)
+                            $('#stamp').val(data[stampIndex + 2].str)
+                            console.log(data[brokerageIndex + 2].str, data[otherIndex + 2].str)
+                            let otherCharges = Number(data[brokerageIndex + 2].str) + Number(data[otherIndex + 2].str)
+                            $('#other').val(otherCharges)
+                            $('#trans').val(data[transIndex + 2].str)
+                            let gstCharges = Number(data[gstIndex + 2].str) * 2
+                            $('#gst').val(gstCharges)
+                            $('#total').val(Math.abs(Number(data[amountIndex + 2].str)))
                           }
-                        })
-                        if (selectedData.length < 2) { break; }
-                        y += increment
-                        y = Number(y.toFixed(4))
-                        let name = selectedData[5].str
-                        let date = data[indexDate - 1].str
-                        let transaction = Number(selectedData[2].str) < 0 ? 'Sell' : 'Buy'
-                        let quantity = Math.abs(Number(selectedData[2].str))
-                        let price = Math.abs(Number(selectedData[1].str))
-                        // console.log(selectedData[0].str.replace(',', ''))
-                        let amount = Math.abs(Number(selectedData[0].str.replace(',', '')))
-                        $('#tableBody').append(`
-                          <tr>
-                            <td>${transaction}</td>
-                            <td>${name}</td>
-                            <td>${date}</td>
-                            <td>${quantity}</td>
-                            <td>${price}</td>
-                            <td></td>
-                            <td>${amount}</td>
-                            <td></td>
-                          </tr>
-                        `)
-                      }
+                          // console.log(data)
+                        } else {
+                          swal({
+                            title: 'Error ',
+                            type: 'error',
+                            text: res.data.resMessage
+                          })
+                        }
+
+                      })
                     } else {
                       swal({
                         title: 'Error',
