@@ -54,7 +54,9 @@ router.post('/extractData', function (req, res) {
   let password = req.body.password
   let path = 'public/attachments/pdfFiles/pdfFile.pdf'
   pdfExtract.extract(path, { password: password }, (err, data) => {
-    // console.log(data.pages[0].content);
+    if (err) {
+      console.log(err)
+    }
     let response = {
       resCode: '000',
       resMessage: 'Data Extracted Successfully.',
@@ -62,10 +64,6 @@ router.post('/extractData', function (req, res) {
     }
     res.send(response)
   });
-})
-
-router.get('/apiInternal/extractData', function (req, res) {
-
 })
 
 router.post('/api/extractData', function (req, res) {
@@ -83,9 +81,8 @@ router.post('/api/extractData', function (req, res) {
       let password = req.body.password
       let brokerType = req.body.brokerType
       let path = 'public/attachments/pdfFiles/pdfFile.pdf'
-      console.log(req.body, req.params, req.query)
       pdfExtract.extract(path, { password: password }, (err, pdfData) => {
-        // console.log(data.pages[0].content);
+        console.log(pdfData.pages[0].content);
         let resData = {}
         let data = pdfData.pages[0].content
         data = _.filter(data, function (obj) {
