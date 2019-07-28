@@ -119,20 +119,21 @@
                             </div>
                           </div>
                           <div class="col-md-4 col-md-offset-4">
-                            <div class="form-group form-md-line-input">
-                              <input type="text" id="pdfPassword" class="form-control">
-                              <label for="password">Password (Optional)</label>
-                            </div>
-                          </div>
-                          <div class="col-md-4 col-md-offset-4">
                             <div class="form-group form-md-line-input form-md-floating-label">
                               <select id="brokerType" class="form-control">
                                 <option value="1">ADITYA BIRLA</option>
                                 <option value="2">SMC GLOBAL</option>
                               </select>
-                              <label for="brokerType">Broker Type</label>
+                              <label for="brokerType">Broker</label>
                             </div>
                           </div>
+                          <div class="col-md-4 col-md-offset-4">
+                            <div class="form-group form-md-line-input">
+                              <input type="text" id="pdfPassword" class="form-control">
+                              <label for="password">Password (Optional)</label>
+                            </div>
+                          </div>
+
                           <div class="col-md-4 col-md-offset-4">
                             <div class="form-group text-center">
                               <button class="btn btn-primary full-width" id="uploadpdfFile" type="button"
@@ -191,7 +192,6 @@
                               <th>Price</th>
                               <th>Brokerage/Unit</th>
                               <th>Amount</th>
-                              <th>Comment</th>
                             </thead>
                             <tbody id="tableBody">
                             </tbody>
@@ -372,7 +372,6 @@
                                   <td>${price}</td>
                                   <td></td>
                                   <td>${amount}</td>
-                                  <td></td>
                                 </tr>
                               `)
                             }
@@ -450,7 +449,6 @@
                                   <td>${data[rowIndex + 8].str}</td>
                                   <td>${data[rowIndex + 9].str}</td>
                                   <td>${Math.abs(Number(data[rowIndex + 11].str))}</td>
-                                  <td></td>
                                 </tr>
                               `)
 
