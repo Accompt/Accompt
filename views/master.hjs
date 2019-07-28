@@ -396,7 +396,7 @@
 <script>
   $(document).ready(() => {
 
-    $("#footerId").text(new Date().getUTCFullYear() + " ©  ACCOMPT SOLUTIONS Pvt. Ltd.. All rights reserved.")
+    $("#footerId").text(new Date().getUTCFullYear() + " ©  ACCOMPT SOLUTIONS Pvt. Ltd. All rights reserved.")
 
     // $('#updateUserDetails').on('click', function () {
     //   if (detailsFormvalidation()) {
