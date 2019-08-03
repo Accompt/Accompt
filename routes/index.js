@@ -53,14 +53,18 @@ router.post('/uploadPdfFile', function (req, res) {
 router.post('/extractData', function (req, res) {
   let password = req.body.password
   let path = 'public/attachments/pdfFiles/pdfFile.pdf'
-  pdfExtract.extract(path, { password: password }, (err, data) => {
+  pdfExtract.extract(path, { password: password }, (err, pdfData) => {
     if (err) {
       console.log(err)
     }
+    let data = []
+    pdfData.pages.forEach(page => {
+      data = data.concat(page.content)
+    });
     let response = {
       resCode: '000',
       resMessage: 'Data Extracted Successfully.',
-      resData: data.pages[0].content
+      resData: data
     }
     res.send(response)
   });
@@ -82,44 +86,49 @@ router.post('/api/extractData', function (req, res) {
       let brokerType = req.body.brokerType
       let path = 'public/attachments/pdfFiles/pdfFile.pdf'
       pdfExtract.extract(path, { password: password }, (err, pdfData) => {
-        console.log(pdfData.pages[0].content);
         let resData = {}
-        let data = pdfData.pages[0].content
+        // let data = pdfData.pages[0].content
+        let data = []
+        pdfData.pages.forEach(page => {
+          data = data.concat(page.content)
+        });
+
         data = _.filter(data, function (obj) {
-          if (!(obj.str == '' || obj.str == ' ')) {
+          if (!(obj.str.trim() == '' || obj.str.trim() == ' ')) {
             return obj
           }
         })
+
         if (brokerType == 1) {
           let indexBroker = _.findIndex(data, function (obj) {
-            return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
+            return obj.str.trim() == 'CONTRACT NOTE CUM TAX INVOICE'
           })
           let indexDate = _.findIndex(data, function (obj) {
-            return obj.str == 'Trade Date'
+            return obj.str.trim() == 'Trade Date'
           })
           let indexCnnum = _.findIndex(data, function (obj) {
-            return obj.str == 'Contract Note No.'
+            return obj.str.trim() == 'Contract Note No.'
           })
           let setIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'Settlement Number'
+            return obj.str.trim() == 'Settlement Number'
           })
           let charges = _.keys(_.pickBy(data, { str: 'Total (Net)' }))
           let indexSTT = Number(charges[0])
           let indexGST = Number(charges[1])
-          resData.date = data[indexDate - 1].str
-          resData.broker = data[indexBroker - 1].str
-          resData.cnnum = data[indexCnnum - 2].str
-          resData.stt = data[indexSTT - 2].str
-          resData.stamp = data[indexSTT - 5].str
-          let otherCharges = data[indexSTT - 7].str == 'NSE' ? data[indexSTT - 4].str : Number(data[indexSTT - 4].str) + Number(data[indexSTT - 6].str)
+          resData.date = data[indexDate - 1].str.trim()
+          resData.broker = data[indexBroker - 1].str.trim()
+          resData.cnnum = data[indexCnnum - 2].str.trim()
+          resData.stt = data[indexSTT - 2].str.trim()
+          resData.stamp = data[indexSTT - 5].str.trim()
+          let otherCharges = data[indexSTT - 7].str.trim() == 'NSE' ? data[indexSTT - 4].str.trim() : Number(data[indexSTT - 4].str.trim()) + Number(data[indexSTT - 6].str.trim())
           resData.other = otherCharges
-          resData.trans = data[indexSTT - 3].str
-          let gstCharges = Math.abs(Number(data[indexGST - 2].str) + Number(data[indexGST - 3].str) + Number(data[indexGST - 4].str))
+          resData.trans = data[indexSTT - 3].str.trim()
+          let gstCharges = Math.abs(Number(data[indexGST - 2].str.trim()) + Number(data[indexGST - 3].str.trim()) + Number(data[indexGST - 4].str.trim()))
           resData.gst = gstCharges
-          resData.total = Math.abs(Number(data[indexGST - 6].str.replace(',', '')))
+          resData.total = Math.abs(Number(data[indexGST - 6].str.trim().replace(',', '')))
           let y = data[setIndex + 1].y
           let assetsArray = []
-          console.log(y)
+
           let increment = 12.24
           while (true) {
             let selectedData = _.filter(data, function (obj) {
@@ -131,54 +140,54 @@ router.post('/api/extractData', function (req, res) {
             y += increment
             y = Number(y.toFixed(4))
             singleObj = {}
-            singleObj.name = selectedData[5].str
-            singleObj.date = data[indexDate - 1].str
-            singleObj.transaction = Number(selectedData[2].str) < 0 ? 'Sell' : 'Buy'
-            singleObj.quantity = Math.abs(Number(selectedData[2].str))
-            singleObj.price = Math.abs(Number(selectedData[1].str))
-            // console.log(selectedData[0].str.replace(',', ''))
-            singleObj.amount = Math.abs(Number(selectedData[0].str.replace(',', '')))
+            singleObj.name = selectedData[5].str.trim()
+            singleObj.date = data[indexDate - 1].str.trim()
+            singleObj.transaction = Number(selectedData[2].str.trim()) < 0 ? 'Sell' : 'Buy'
+            singleObj.quantity = Math.abs(Number(selectedData[2].str.trim()))
+            singleObj.price = Math.abs(Number(selectedData[1].str.trim()))
+            singleObj.brokerage = ''
+            singleObj.amount = Math.abs(Number(selectedData[0].str.trim().replace(',', '')))
             assetsArray.push(singleObj)
           }
           resData.assetsArray = assetsArray
         } else if (brokerType == 2) {
           let indexBroker = _.findIndex(data, function (obj) {
-            return obj.str == 'CONTRACT NOTE CUM TAX INVOICE'
+            return obj.str.trim() == 'CONTRACT NOTE CUM TAX INVOICE'
           })
           let indexDate = _.findIndex(data, function (obj) {
-            return obj.str == 'Trade Date'
+            return obj.str.trim() == 'Trade Date'
           })
           let indexCnnum = _.findIndex(data, function (obj) {
-            return obj.str == 'Contract Note No.'
+            return obj.str.trim() == 'Contract Note No.'
           })
           let sstIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'STT'
+            return obj.str.trim() == 'STT'
           })
           let brokerageIndex = _.findLastIndex(data, function (obj) {
-            return obj.str == 'Brokerage'
+            return obj.str.trim() == 'Brokerage'
           })
           let transIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'Transaction Charges'
+            return obj.str.trim() == 'Transaction Charges'
           })
           let stampIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'Stamp Duty'
+            return obj.str.trim() == 'Stamp Duty'
           })
           let otherIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'Taxable value of supply'
+            return obj.str.trim() == 'Taxable value of supply'
           })
           let gstIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'CGST@9%'
+            return obj.str.trim() == 'CGST@9%'
           })
           let amountIndex = _.findIndex(data, function (obj) {
-            return obj.str == 'Net amount'
+            return obj.str.trim() == 'Net amount'
           })
 
-          resData.date = data[indexDate + 1].str
-          resData.cnnum = data[indexCnnum + 1].str
-          resData.broker = data[indexBroker + 2].str
+          resData.date = data[indexDate + 1].str.trim()
+          resData.cnnum = data[indexCnnum + 1].str.trim()
+          resData.broker = data[indexBroker + 2].str.trim()
 
           let initialRow = _.findIndex(data, function (obj) {
-            return obj.str == 'MTF'
+            return obj.str.trim() == 'MTF'
           })
 
           let x = 13.9
@@ -201,43 +210,307 @@ router.post('/api/extractData', function (req, res) {
               return (obj.x == x && obj.y == y + 26)
             })
 
-            console.log('ROW INDEX => ', rowIndex)
-            let name = data[rowIndex + 4].str
+            let name = data[rowIndex + 4].str.trim()
             rowIndex = data[rowIndex + 4].x == data[rowIndex + 5].x ? rowIndex + 1 : rowIndex
-            console.log(name)
-            console.log(nextObj10, nextObj16, nextObj20, nextObj26)
+
 
             singleObj = {}
             singleObj.name = name
-            singleObj.date = data[indexDate + 1].str
-            singleObj.transaction = data[rowIndex + 5].str
-            singleObj.quantity = data[rowIndex + 6].str
-            singleObj.price = data[rowIndex + 8].str
-            singleObj.brokerage = data[rowIndex + 9].str
-            // console.log(selectedData[0].str.replace(',', ''))
-            singleObj.amount = Math.abs(Number(data[rowIndex + 11].str))
+            singleObj.date = data[indexDate + 1].str.trim()
+            singleObj.transaction = data[rowIndex + 5].str.trim()
+            singleObj.quantity = data[rowIndex + 6].str.trim()
+            singleObj.price = data[rowIndex + 8].str.trim()
+            singleObj.brokerage = data[rowIndex + 9].str.trim()
+            singleObj.amount = Math.abs(Number(data[rowIndex + 11].str.trim()))
             assetsArray.push(singleObj)
-            if (nextObj10 != undefined && nextObj10.str != 'Description') {
+            if (nextObj10 != undefined && nextObj10.str.trim() != 'Description') {
               y = y + 10
-            } else if (nextObj16 != undefined && nextObj16.str != 'Description') {
+            } else if (nextObj16 != undefined && nextObj16.str.trim() != 'Description') {
               y = y + 16
-            } else if (nextObj20 != undefined && nextObj20.str != 'Description') {
+            } else if (nextObj20 != undefined && nextObj20.str.trim() != 'Description') {
               y = y + 20
-            } else if (nextObj26 != undefined && nextObj26.str != 'Description') {
+            } else if (nextObj26 != undefined && nextObj26.str.trim() != 'Description') {
               y = y + 26
             } else {
               break
             }
           }
-          resData.stt = data[sstIndex + 2].str
-          resData.stamp = data[stampIndex + 2].str
-          console.log(data[brokerageIndex + 2].str, data[otherIndex + 2].str)
-          let otherCharges = Number(data[brokerageIndex + 2].str) + Number(data[otherIndex + 2].str)
+          resData.stt = data[sstIndex + 2].str.trim()
+          resData.stamp = data[stampIndex + 2].str.trim()
+          let otherCharges = Number(data[brokerageIndex + 2].str.trim()) + Number(data[otherIndex + 2].str.trim())
           resData.other = otherCharges
-          resData.trans = data[transIndex + 2].str
-          let gstCharges = Number(data[gstIndex + 2].str) * 2
+          resData.trans = data[transIndex + 2].str.trim()
+          let gstCharges = Number(data[gstIndex + 2].str.trim()) * 2
           resData.gst = gstCharges
-          resData.total = Math.abs(Number(data[amountIndex + 2].str))
+          resData.total = Math.abs(Number(data[amountIndex + 2].str.trim()))
+          resData.assetsArray = assetsArray
+        } else if (brokerType == 3) {
+          let indexBroker = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE CUM TAX INVOICE'
+          })
+          let indexDate = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'TRADE DATE'
+          })
+          let indexCnnum = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE NO.'
+          })
+
+          resData.date = data[indexDate + 1].str.trim()
+          resData.broker = data[indexBroker + 3].str.trim()
+          resData.cnnum = data[indexCnnum + 1].str.trim()
+
+          let startIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'TOTAL (Net)'
+          })
+
+          resData.stt = Number(data[startIndex + 9].str.trim())
+          resData.stamp = data[startIndex + 27].str.trim()
+          let otherCharges = Number(data[startIndex + 21].str.trim()) + Number(data[startIndex + 24].str.trim())
+          resData.other = otherCharges
+          resData.trans = data[startIndex + 18].str.trim()
+          let gstCharges = Math.abs(Number(data[startIndex + 12].str.trim()) + Number(data[startIndex + 15].str.trim()))
+          resData.gst = gstCharges
+          resData.total = Math.abs(Number(data[startIndex + 30].str.trim()))
+
+          let setIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim().includes('NSE - CAPITAL - Normal')
+          })
+
+          let y = data[setIndex + 1].y
+          let assetsArray = []
+
+          while (true) {
+            let selectedData = _.filter(data, function (obj) {
+              if (obj.y == y) {
+                return obj
+              }
+            })
+            if (selectedData.length < 1 || selectedData[0].str.trim() == 'NSE CAPITAL') {
+              break
+            } else if (selectedData[0].str.trim() != 'Net Total') {
+              singleObj = {}
+              singleObj.name = selectedData[4].str.trim()
+              singleObj.date = data[indexDate + 1].str.trim()
+              singleObj.transaction = selectedData[5].str.trim() == 'S' ? 'Sell' : 'Buy'
+              singleObj.quantity = selectedData[6].str.trim()
+              singleObj.price = selectedData[9].str.trim()
+              singleObj.brokerage = selectedData[8].str.trim()
+              singleObj.amount = selectedData[10].str.trim()
+              assetsArray.push(singleObj)
+            }
+
+            let lastIndex = selectedData.length - 1
+            let newIndex = _.findIndex(data, function (obj) {
+              return (obj.x == selectedData[lastIndex].x && obj.y == selectedData[lastIndex].y)
+            })
+
+            y = data[newIndex + 1].y
+            y = Number(y)
+          }
+          resData.assetsArray = assetsArray
+        } else if (brokerType == 4) {
+          let indexBroker = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE CUM BILL'
+          })
+          let indexDate = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Trade Date'
+          })
+          let indexCnnum = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Contract Note No.'
+          })
+
+          resData.date = data[indexDate + 1].str.trim()
+          resData.broker = data[indexBroker + 1].str.trim()
+          resData.cnnum = data[indexCnnum + 1].str.trim()
+
+          let startIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'TOTAL (NET)'
+          })
+
+          resData.stt = Number(data[startIndex + 4].str.trim())
+          resData.stamp = Number(data[startIndex + 12].str.trim())
+          resData.other = Number(data[startIndex + 10].str.trim())
+          resData.trans = Number(data[startIndex + 8].str.trim())
+          resData.gst = Number(data[startIndex + 6].str.trim())
+          resData.total = Math.abs(Number(data[startIndex + 14].str.trim()))
+
+          let setIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Remarks'
+          })
+
+          let y = data[setIndex + 1].y
+          let assetsArray = []
+
+          while (true) {
+            let selectedData = _.filter(data, function (obj) {
+              if (obj.y == y) {
+                return obj
+              }
+            })
+            if (selectedData.length < 1 || selectedData[0].str.trim() == 'TOTAL (NET)') {
+              break
+            } else if (selectedData[0].str.trim() != 'Net Total') {
+              singleObj = {}
+              singleObj.name = selectedData[4].str.trim()
+              singleObj.date = data[indexDate + 1].str.trim()
+              singleObj.transaction = selectedData[5].str.trim() == 'S' ? 'Sell' : 'Buy'
+              singleObj.quantity = selectedData[6].str.trim()
+              singleObj.price = selectedData[9].str.trim()
+              singleObj.brokerage = selectedData[8].str.trim()
+              singleObj.amount = Math.abs(Number(selectedData[11].str.trim()))
+              assetsArray.push(singleObj)
+            }
+
+            let lastIndex = selectedData.length - 1
+            let newIndex = _.findIndex(data, function (obj) {
+              return (obj.x == selectedData[lastIndex].x && obj.y == selectedData[lastIndex].y)
+            })
+
+            y = data[newIndex + 1].y
+            y = Number(y)
+          }
+          resData.assetsArray = assetsArray
+        } else if (brokerType == 5) {
+          let indexBroker = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE CUM BILL'
+          })
+          let indexDate = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'TRADE DATE'
+          })
+          let indexCnnum = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE NO.'
+          })
+
+          resData.date = data[indexDate + 1].str.trim()
+          resData.broker = data[indexBroker + 1].str.trim()
+          resData.cnnum = data[indexCnnum + 1].str.trim()
+
+          let sttIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Tax(Rs.)'
+          })
+
+          let cgstIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CGST'
+          })
+
+          let sgstIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'SGST'
+          })
+
+          let igstIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'IGST'
+          })
+
+          let uttIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'UTT'
+          })
+
+          let transIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Charges(Rs.)'
+          })
+
+          let otherIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Fees(Rs.)'
+          })
+
+          let stampIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Stamp Duty(Rs.)'
+          })
+
+          let roundIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Difference(Rs.)'
+          })
+
+          let totalIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'by Client)(Rs.)'
+          })
+
+          resData.stt = Number(data[sttIndex + 2].str.trim())
+
+          let CGST, SGST, IGST, UTT
+          if (data[cgstIndex + 1].str == 'Rate') {
+            CGST = data[cgstIndex + 2].str == 'Amount' ? 0 : Number(data[cgstIndex + 6].str)
+          } else if (data[cgstIndex + 1].str == 'Amount') {
+            CGST = isNaN(data[cgstIndex + 3].str) ? 0 : Number(data[cgstIndex + 4].str)
+          }
+
+          if (data[sgstIndex + 1].str == 'Rate') {
+            SGST = data[sgstIndex + 2].str == 'Amount' ? 0 : Number(data[sgstIndex + 6].str)
+          } else if (data[sgstIndex + 1].str == 'Amount') {
+            SGST = isNaN(data[sgstIndex + 3].str) ? 0 : Number(data[sgstIndex + 4].str)
+          }
+
+          if (data[igstIndex + 1].str == 'Rate') {
+            IGST = data[igstIndex + 2].str == 'Amount' ? 0 : Number(data[igstIndex + 6].str)
+          } else if (data[igstIndex + 1].str == 'Amount') {
+            IGST = isNaN(data[igstIndex + 3].str) ? 0 : Number(data[igstIndex + 4].str)
+          }
+
+          if (data[uttIndex + 1].str == 'Rate') {
+            UTT = data[uttIndex + 2].str == 'Amount' ? 0 : Number(data[uttIndex + 6].str)
+          } else if (data[uttIndex + 1].str == 'Amount') {
+            UTT = isNaN(data[uttIndex + 3].str) ? 0 : Number(data[uttIndex + 4].str)
+          }
+
+          resData.stamp = Number(data[stampIndex + 2].str.trim())
+          resData.other = Number(data[otherIndex + 2].str.trim()) + Number(data[roundIndex + 2].str.trim())
+          resData.trans = Number(data[transIndex + 2].str.trim())
+          resData.gst = CGST + SGST + IGST + UTT
+          resData.total = data[totalIndex + 2].str.includes(')') ? Math.abs(Number(data[totalIndex + 3].str.split(' ')[1].trim())) : Math.abs(Number(data[totalIndex + 2].str.trim()))
+
+          let setIndex = _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Nse Equity'
+          })
+
+          let y, nameIndex
+          if (isNaN(data[setIndex + 4].str)) {
+            y = data[setIndex + 5].y
+            nameIndex = setIndex + 3
+          } else {
+            y = data[setIndex + 3].y
+            nameIndex = -1
+          }
+          let assetsArray = []
+
+          while (true) {
+            let selectedData = _.filter(data, function (obj) {
+              if (obj.y == y) {
+                return obj
+              }
+            })
+            if (selectedData.length < 6) {
+              break
+            } else {
+              // console.log('------------------------------------------------------')
+              // console.log(selectedData)
+              // console.log('------------------------------------------------------')
+
+              singleObj = {}
+              singleObj.name = nameIndex < 0 ? selectedData[0].str.trim() : data[nameIndex].str + " " + data[nameIndex + 1].str
+              let i = nameIndex < 0 ? 0 : 1
+              singleObj.date = data[indexDate + 1].str.trim()
+              singleObj.transaction = Number(selectedData[6 - i].str.trim()) < 0 ? 'Sell' : 'Buy'
+              singleObj.quantity = selectedData[1 - i].str.trim()
+              singleObj.price = selectedData[4 - i].str.trim()
+              singleObj.brokerage = selectedData[3 - i].str.trim()
+              singleObj.amount = Math.abs(Number(selectedData[6 - i].str.trim()))
+              assetsArray.push(singleObj)
+            }
+
+            let lastIndex = selectedData.length - 1
+            let newIndex = _.findIndex(data, function (obj) {
+              return (obj.x == selectedData[lastIndex].x && obj.y == selectedData[lastIndex].y)
+            })
+
+            if (isNaN(data[newIndex + 4].str)) {
+              y = data[newIndex + 5].y
+              nameIndex = newIndex + 3
+            } else {
+              y = data[newIndex + 3].y
+              nameIndex = -1
+            }
+            y = Number(y)
+          }
           resData.assetsArray = assetsArray
         }
 
