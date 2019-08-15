@@ -512,12 +512,107 @@ router.post('/api/extractData', function (req, res) {
             y = Number(y)
           }
           resData.assetsArray = assetsArray
+        } else if (brokerType == 6) {
+          let indexBroker = 1 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'CONTRACT NOTE '
+          })
+          let indexDate = 2 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Clearing / Trading No.'
+          })
+          let indexCnnum = 1 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Clearing / Trading No.'
+          })
+
+          resData.date = data[indexDate].str.trim()
+          resData.broker = data[indexBroker].str.trim()
+          resData.cnnum = data[indexCnnum].str.trim()
+
+          let sttIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Securities  Transaction Tax (Rs.)'
+          })
+
+          let stIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Service Tax (15% of Brokerage) (Rs.)**'
+          })
+
+          let transIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Exchange Transaction Charges (Rs.)'
+          })
+
+          let stTransIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Service Tax on Exchange Transaction Charges (Rs.)'
+          })
+
+          let otherIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'SEBI turnover Fees (Rs.)'
+          })
+
+          let stOtherIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Service Tax on SEBI turnover Fees (Rs.)'
+          })
+
+          let stampIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Stamp Duty (Rs.)'
+          })
+
+          let totalIndex = 5 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Net amount receivable by Client /(payable by Client) (Rs.)'
+          })
+
+          resData.stt = Number(data[sttIndex].str.trim())
+          resData.stamp = Number(data[stampIndex].str.trim())
+          resData.other = Number(data[otherIndex].str.trim())
+          resData.trans = Number(data[transIndex].str.trim())
+          resData.gst = Number(data[stIndex].str.trim()) + Number(data[stOtherIndex].str.trim()) + Number(data[stTransIndex].str.trim())
+          resData.total = data[totalIndex].str.trim()
+
+          let startIndex = 2 + _.findIndex(data, function (obj) {
+            return obj.str.trim() == 'Remarks'
+          })
+
+          let y = data[startIndex].y
+
+          let assetsArray = []
+
+          while (true) {
+            let selectedData = _.filter(data, function (obj) {
+              if (obj.y == y) {
+                return obj
+              }
+            })
+            if (selectedData.length < 6) {
+              break
+            } else {
+              // console.log('------------------------------------------------------')
+              // console.log(selectedData)
+              // console.log('------------------------------------------------------')
+
+              singleObj = {}
+              singleObj.name = selectedData[4].str.trim()
+              singleObj.date = data[indexDate].str.trim()
+              singleObj.transaction = selectedData[5].str.trim() == 'S' ? 'Sell' : 'Buy'
+              singleObj.quantity = selectedData[6].str.trim()
+              singleObj.price = selectedData[9].str.trim()
+              singleObj.brokerage = selectedData[8].str.trim()
+              singleObj.amount = Math.abs(Number(selectedData[11].str.trim()))
+              assetsArray.push(singleObj)
+            }
+
+            let lastIndex = selectedData.length - 1
+            let newIndex = 1 + _.findIndex(data, function (obj) {
+              return (obj.x == selectedData[lastIndex].x && obj.y == selectedData[lastIndex].y)
+            })
+
+            y = Number(data[newIndex].y)
+          }
+          resData.assetsArray = assetsArray
         }
 
         let response = {
           resCode: '000',
           resMessage: 'Data Extracted Successfully.',
-          resData: resData
+          resData: resData,
+          arrayData: data
         }
         res.send(response)
       });

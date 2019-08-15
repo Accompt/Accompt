@@ -126,6 +126,7 @@
                                 <option value="3">KARVY</option>
                                 <option value="4">PHILIP CAPITAL</option>
                                 <option value="5">SHAREKHAN</option>
+                                <option value="6">HDFC SECURITIES</option>
                               </select>
                               <label for="brokerType">Broker</label>
                             </div>
@@ -308,6 +309,7 @@
                   success: function (response) {
                     if (response.resCode && response.resCode === '000') {
                       let data = response.resData
+                      // console.log(response.arrayData)
                       $('#uploadpdfFile').text('Upload pdf file');
                       $('#uploadpdfFile').prop('disabled', false);
                       $('#date').val(data.date)
