@@ -612,15 +612,11 @@ router.post('/api/extractData', function (req, res) {
           resCode: '000',
           resMessage: 'Data Extracted Successfully.',
           resData: resData,
-          arrayData: data
+          // arrayData: data
         }
-        let origin = req.headers.origin
+
         console.log(req.headers.origin)
 
-        res.setHeader('Access-Control-Allow-Origin', origin)
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-        res.setHeader('Access-Control-Allow-Credentials', true)
         res.send(response)
       });
     }
