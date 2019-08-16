@@ -86,6 +86,13 @@ router.post('/api/extractData', function (req, res) {
       let brokerType = req.body.brokerType
       let path = 'public/attachments/pdfFiles/pdfFile.pdf'
       pdfExtract.extract(path, { password: password }, (err, pdfData) => {
+        if (err) {
+          console.log(err)
+          return res.send({
+            resCode: '404',
+            resMessage: err.message,
+          })
+        }
         let resData = {}
         // let data = pdfData.pages[0].content
         let data = []
