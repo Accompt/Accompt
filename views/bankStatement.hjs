@@ -120,15 +120,11 @@
                           </div>
                           <div class="col-md-4 col-md-offset-4">
                             <div class="form-group form-md-line-input form-md-floating-label">
-                              <select id="brokerType" class="form-control">
-                                <option value="1">ADITYA BIRLA</option>
-                                <option value="2">SMC GLOBAL</option>
-                                <option value="3">KARVY</option>
-                                <option value="4">PHILIP CAPITAL</option>
-                                <option value="5">SHAREKHAN</option>
-                                <option value="6">HDFC SECURITIES</option>
+                              <select id="bankType" class="form-control">
+                                <option value="1">HDFC</option>
+                                <option value="2">IDBI</option>
                               </select>
-                              <label for="brokerType">Broker</label>
+                              <label for="bankType">Bank</label>
                             </div>
                           </div>
                           <div class="col-md-4 col-md-offset-4">
@@ -168,20 +164,8 @@
                         <div class="row">
                           <div class="col-md-3">
                             <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="date" class="form-control">
-                              <label for="date">Date</label>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="broker" class="form-control">
-                              <label for="broker">Broker</label>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="cnnum" class="form-control">
-                              <label for="cnnum">CN Num</label>
+                              <input type="text" readonly id="accNo" class="form-control">
+                              <label for="accNo">Account No:</label>
                             </div>
                           </div>
                         </div>
@@ -189,55 +173,16 @@
                           <table class="table table-striped table-bordered dt-responsive wrap" cellspacing="0"
                             width="100%">
                             <thead>
-                              <th>Transaction</th>
-                              <th>Asset Name</th>
                               <th>Date</th>
-                              <th>Quantity</th>
-                              <th>Price</th>
-                              <th>Brokerage/Unit</th>
-                              <th>Amount</th>
+                              <th>Narration</th>
+                              <th>Chq, No.</th>
+                              <th>Cr</th>
+                              <th>Dr</th>
+                              <th>Balance</th>
                             </thead>
                             <tbody id="tableBody">
                             </tbody>
                           </table>
-                        </div>
-                        <div class="row last_row">
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="stt" class="form-control">
-                              <label for="stt">STT</label>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="stamp" class="form-control">
-                              <label for="stamp">Stamp Charges</label>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="other" class="form-control">
-                              <label for="other">Other Charges</label>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="gst" class="form-control">
-                              <label for="gst">GST/S. Tax</label>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="trans" class="form-control">
-                              <label for="trans">Trans. Charges</label>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="form-group form-md-line-input form-md-floating-label">
-                              <input type="text" readonly id="total" class="form-control">
-                              <label for="total" class="font-weight-bold">Total Amount (Receivable)</label>
-                            </div>
-                          </div>
                         </div>
                       </div>
                   </div>
@@ -299,9 +244,9 @@
                 var formData = new FormData();
                 formData.append('pdfFile', pdfFileAttachment);
                 formData.append('password', $('#pdfPassword').val());
-                formData.append('brokerType', $('#brokerType :selected').val());
+                formData.append('bankType', $('#bankType :selected').val());
                 $.ajax({
-                  url: '/api/extractData',
+                  url: '/api/bankStatement',
                   type: 'post',
                   data: formData,
                   processData: false,
@@ -312,26 +257,17 @@
                       console.log(response.arrayData)
                       $('#uploadpdfFile').text('Upload pdf file');
                       $('#uploadpdfFile').prop('disabled', false);
-                      $('#date').val(data.date)
-                      $('#broker').val(data.broker)
-                      $('#cnnum').val(data.cnnum)
-                      $('#stt').val(data.stt)
-                      $('#stamp').val(data.stamp)
-                      $('#other').val(data.other)
-                      $('#trans').val(data.trans)
-                      $('#gst').val(data.gst)
-                      $('#total').val(data.total)
+                      $('#accNo').val(data.accNo)
                       $('#tableBody').html('')
                       data.assetsArray.forEach(asset => {
                         $('#tableBody').append(`
                           <tr>
-                            <td>${asset.transaction}</td>
-                            <td>${asset.name}</td>
                             <td>${asset.date}</td>
-                            <td>${asset.quantity}</td>
-                            <td>${asset.price}</td>
-                            <td>${asset.brokerage}</td>
-                            <td>${asset.amount}</td>
+                            <td>${asset.narr}</td>
+                            <td>${asset.chqNo}</td>
+                            <td>${asset.cr}</td>
+                            <td>${asset.dr}</td>
+                            <td>${asset.balance}</td>
                           </tr>
                         `)
                       });
