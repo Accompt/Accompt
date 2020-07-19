@@ -20,6 +20,8 @@ app.use(bodyParser.json({ limit: '100 mb' }))
 app.use(bodyParser.urlencoded({ extended: false, limit: '100 mb' }))
 app.use(cookieParser())
 app.use(express.static('public'))
+const cors = require('cors')
+
 const corsOptions = {
   origin: 'http://accompt.enthralingmatrix.com/'
 }
