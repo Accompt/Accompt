@@ -23,14 +23,16 @@ app.use(express.static('public'))
 const cors = require('cors')
 
 const corsOptions = {
-  origin: 'http://accompt.enthralingmatrix.com/'
+  origin: 'http://accompt.enthralingmatrix.com'
 }
 app.use(cors(corsOptions))
 
 app.use(function (req, res, next) {
   console.log("----------------------------------HERE----------------------------------")
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://accompt.enthralingmatrix.com");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
