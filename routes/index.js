@@ -951,7 +951,7 @@ router.post('/api/bankStatement', function (req, res) {
           res.send(response)
         } catch (err) {
           let response = {
-            resCode: '000',
+            resCode: '999',
             resMessage: 'Format does not match. Please check and try again'
           }
           console.log(req.headers.origin)
