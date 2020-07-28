@@ -123,6 +123,7 @@
                               <select id="bankType" class="form-control">
                                 <option value="1">HDFC</option>
                                 <option value="2">IDBI</option>
+                                <option value="3">ICICI</option>
                               </select>
                               <label for="bankType">Bank</label>
                             </div>

@@ -493,10 +493,6 @@ router.post('/api/form16', function (req, res) {
             if (selectedData.length < 6) {
               break
             } else {
-              // console.log('------------------------------------------------------')
-              // console.log(selectedData)
-              // console.log('------------------------------------------------------')
-
               singleObj = {}
               singleObj.name = nameIndex < 0 ? selectedData[0].str.trim() : data[nameIndex].str + " " + data[nameIndex + 1].str
               let i = nameIndex < 0 ? 0 : 1
@@ -645,10 +641,6 @@ router.post('/api/form16', function (req, res) {
             if (selectedData.length < 6) {
               break
             } else {
-              // console.log('------------------------------------------------------')
-              // console.log(selectedData)
-              // console.log('------------------------------------------------------')
-
               singleObj = {}
               singleObj.name = selectedData[4].str.trim()
               singleObj.date = data[indexDate].str.trim()
@@ -760,7 +752,178 @@ router.post('/api/bankStatement', function (req, res) {
               assetsArray.push(singleObj)
             }
             resData.assetsArray = assetsArray
+          } else if (bankType == 2) {
+
+            let setIndex = _.findIndex(data, function (obj) {
+              return obj.str.trim() == "Balance"
+            })
+
+            if (setIndex != -1) {
+              let index = _.findIndex(data, function (obj) {
+                return obj.str.trim().includes(":  ") && obj.str.trim().length == 19
+              })
+
+              resData.accNo = data[index].str.split(":").pop().trim()
+              let rowIndex = setIndex + 1
+              let assetsArray = []
+
+              while (true) {
+                if (data[rowIndex].str.trim() == "Statement Summary  :-") { break; }
+                if (data[rowIndex].str.trim() == "IDBI Bank Ltd. Regd. Office: IDBI Tower, WTC Complex, Mumbai 400005. Website:www.idbi.com") {
+                  rowIndex = _.findIndex(data, function (obj) {
+                    return obj.str.trim() == "Balance"
+                  }, rowIndex)
+                  rowIndex++
+                }
+                rowIndex++
+                singleObj = {}
+                singleObj.date = data[rowIndex].str.trim()
+                rowIndex += 2
+                singleObj.narr = data[rowIndex].str.trim()
+                rowIndex++
+                singleObj.chqNo = ""
+                if (data[rowIndex].str.trim().length > 2) {
+                  singleObj.chqNo = data[rowIndex].str.trim()
+                  rowIndex++
+                }
+                if (data[rowIndex].str.trim() == "DR") {
+                  singleObj.cr = data[rowIndex + 2].str.trim()
+                  singleObj.dr = "0.00"
+                } else {
+                  singleObj.cr = "0.00"
+                  singleObj.dr = data[rowIndex + 2].str.trim()
+                }
+                rowIndex += 3
+                singleObj.balance = data[rowIndex].str.trim()
+                rowIndex++
+                assetsArray.push(singleObj)
+                if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS") {
+                  if (pdfData.pages.length == 1) {
+                    break;
+                  } else {
+                    rowIndex += 11
+                  }
+                }
+                if (data[rowIndex].str.trim() == "Page 2 of" || data[rowIndex].str.trim() == "Page 3 of") {
+                  rowIndex += 4
+                }
+                if (data[rowIndex].str.trim() == "Statement Summary:-") {
+                  break;
+                }
+              }
+              resData.assetsArray = assetsArray
+            } else {
+              let index = _.findIndex(data, function (obj) {
+                return obj.str.trim().includes(": ") && obj.str.trim().length == 18
+              })
+
+              resData.accNo = data[index].str.split(":").pop().trim()
+
+              let setIndex = _.findIndex(data, function (obj) {
+                return obj.str.trim() == "(INR)"
+              })
+
+              let rowIndex = setIndex + 1
+              let assetsArray = []
+
+              while (true) {
+                singleObj = {}
+                singleObj.date = data[rowIndex].str.trim()
+                rowIndex++
+                singleObj.narr = data[rowIndex].str.trim()
+                rowIndex++
+                singleObj.chqNo = ""
+                if (data[rowIndex].str.trim().length > 3) {
+                  singleObj.chqNo = data[rowIndex].str.trim()
+                  rowIndex++
+                }
+                if (data[rowIndex].str.trim() == "Dr.") {
+                  singleObj.cr = data[rowIndex + 2].str.trim()
+                  singleObj.dr = "0.00"
+                } else {
+                  singleObj.cr = "0.00"
+                  singleObj.dr = data[rowIndex + 2].str.trim()
+                }
+                rowIndex += 5
+                singleObj.balance = data[rowIndex].str.trim()
+                rowIndex++
+                assetsArray.push(singleObj)
+                if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS") {
+                  if (pdfData.pages.length == 1) {
+                    break;
+                  } else {
+                    rowIndex += 11
+                  }
+                }
+                if (data[rowIndex].str.trim() == "Page 2 of" || data[rowIndex].str.trim() == "Page 3 of") {
+                  rowIndex += 4
+                }
+                if (data[rowIndex].str.trim() == "Statement Summary:-") {
+                  break;
+                }
+              }
+              resData.assetsArray = assetsArray
+            }
           } else if (bankType == 3) {
+
+
+            let accIndex = _.findIndex(data, function (obj) {
+              return obj.str.trim().includes("Account No")
+            })
+
+            let setIndex = _.findIndex(data, function (obj) {
+              return obj.str.trim() == "Balance"
+            })
+
+            let depositX = _.findIndex(data, function (obj) {
+              return obj.str.trim() == "Deposit"
+            })
+            depositX = data[depositX].x
+
+            if (setIndex != -1) {
+              resData.accNo = data[accIndex + 1].str.trim()
+
+              let rowIndex = setIndex + 1
+              let assetsArray = []
+              let count = 1;
+              while (true) {
+                if (data[rowIndex].str.trim() == "Transaction Description :") { break; }
+                if (data[rowIndex].str.trim() == "Page 1 of") { rowIndex += 2; }
+
+                singleObj = {}
+                singleObj.date = data[rowIndex].str.trim()
+                rowIndex++
+                singleObj.narr = data[rowIndex].str.trim()
+                rowIndex++
+
+
+                while (data[rowIndex].x == data[rowIndex - 1].x) {
+                  singleObj.narr += `${data[rowIndex].str.trim()}`
+                  rowIndex++
+                }
+
+                singleObj.chqNo = ""
+                if (!data[rowIndex].str.trim().includes('/')) {
+                  singleObj.chqNo = data[rowIndex].str.trim()
+                  rowIndex++
+                }
+                rowIndex++
+                if (data[rowIndex].x < depositX) {
+                  singleObj.cr = data[rowIndex].str.trim()
+                  singleObj.dr = "0.00"
+                } else {
+                  singleObj.cr = "0.00"
+                  singleObj.dr = data[rowIndex].str.trim()
+                }
+                rowIndex++
+                singleObj.balance = data[rowIndex].str.trim()
+                rowIndex++
+                assetsArray.push(singleObj)
+                count++
+              }
+              resData.assetsArray = assetsArray
+            }
+          } else {
             let indexBroker = _.findIndex(data, function (obj) {
               return obj.str.trim() == 'CONTRACT NOTE CUM TAX INVOICE'
             })
@@ -854,89 +1017,6 @@ router.post('/api/bankStatement', function (req, res) {
             resData.gst = gstCharges
             resData.total = Math.abs(Number(data[amountIndex + 2].str.trim()))
             resData.assetsArray = assetsArray
-          } else if (bankType == 2) {
-
-
-            let setIndex = _.findIndex(data, function (obj) {
-              return obj.str.trim() == "Balance"
-            })
-
-            if (setIndex != -1) {
-              let index = _.findIndex(data, function (obj) {
-                return obj.str.trim().includes(":  ") && obj.str.trim().length == 19
-              })
-
-              resData.accNo = data[index].str.split(":").pop().trim()
-
-              let rowIndex = setIndex + 1
-              let assetsArray = []
-
-              while (true) {
-                if (data[rowIndex].str.trim() == "Statement Summary  :-") { break; }
-                rowIndex++
-                singleObj = {}
-                singleObj.date = data[rowIndex].str.trim()
-                rowIndex += 2
-                singleObj.narr = data[rowIndex].str.trim()
-                rowIndex++
-                singleObj.chqNo = ""
-                if (data[rowIndex].str.trim().length > 2) {
-                  singleObj.chqNo = data[rowIndex].str.trim()
-                  rowIndex++
-                }
-                if (data[rowIndex].str.trim() == "DR") {
-                  singleObj.cr = data[rowIndex + 2].str.trim()
-                  singleObj.dr = "0.00"
-                } else {
-                  singleObj.cr = "0.00"
-                  singleObj.dr = data[rowIndex + 2].str.trim()
-                }
-                rowIndex += 3
-                singleObj.balance = data[rowIndex].str.trim()
-                rowIndex++
-                assetsArray.push(singleObj)
-              }
-              resData.assetsArray = assetsArray
-            } else {
-              let index = _.findIndex(data, function (obj) {
-                return obj.str.trim().includes(": ") && obj.str.trim().length == 18
-              })
-
-              resData.accNo = data[index].str.split(":").pop().trim()
-
-              let setIndex = _.findIndex(data, function (obj) {
-                return obj.str.trim() == "(INR)"
-              })
-
-              let rowIndex = setIndex + 1
-              let assetsArray = []
-
-              while (true) {
-                if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS") { break; }
-                singleObj = {}
-                singleObj.date = data[rowIndex].str.trim()
-                rowIndex++
-                singleObj.narr = data[rowIndex].str.trim()
-                rowIndex++
-                singleObj.chqNo = ""
-                if (data[rowIndex].str.trim().length > 3) {
-                  singleObj.chqNo = data[rowIndex].str.trim()
-                  rowIndex++
-                }
-                if (data[rowIndex].str.trim() == "Dr.") {
-                  singleObj.cr = data[rowIndex + 2].str.trim()
-                  singleObj.dr = "0.00"
-                } else {
-                  singleObj.cr = "0.00"
-                  singleObj.dr = data[rowIndex + 2].str.trim()
-                }
-                rowIndex += 5
-                singleObj.balance = data[rowIndex].str.trim()
-                rowIndex++
-                assetsArray.push(singleObj)
-              }
-              resData.assetsArray = assetsArray
-            }
           }
 
           let response = {
@@ -950,6 +1030,7 @@ router.post('/api/bankStatement', function (req, res) {
           res.send(response)
 
         } catch (err) {
+          console.log(err)
           let response = {
             resCode: '999',
             resMessage: 'Format does not match. Please check and try again'
@@ -1380,10 +1461,6 @@ router.post('/api/extractData', function (req, res) {
             if (selectedData.length < 6) {
               break
             } else {
-              // console.log('------------------------------------------------------')
-              // console.log(selectedData)
-              // console.log('------------------------------------------------------')
-
               singleObj = {}
               singleObj.name = nameIndex < 0 ? selectedData[0].str.trim() : data[nameIndex].str + " " + data[nameIndex + 1].str
               let i = nameIndex < 0 ? 0 : 1
@@ -1532,10 +1609,6 @@ router.post('/api/extractData', function (req, res) {
             if (selectedData.length < 6) {
               break
             } else {
-              // console.log('------------------------------------------------------')
-              // console.log(selectedData)
-              // console.log('------------------------------------------------------')
-
               singleObj = {}
               singleObj.name = selectedData[4].str.trim()
               singleObj.date = data[indexDate].str.trim()
