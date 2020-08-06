@@ -866,7 +866,6 @@ router.post('/api/bankStatement', function (req, res) {
             }
           } else if (bankType == 3) {
 
-
             let accIndex = _.findIndex(data, function (obj) {
               return obj.str.trim().includes("Account No")
             })
@@ -888,7 +887,10 @@ router.post('/api/bankStatement', function (req, res) {
               let count = 1;
               while (true) {
                 if (data[rowIndex].str.trim() == "Transaction Description :") { break; }
-                if (data[rowIndex].str.trim() == "Page 1 of") { rowIndex += 2; }
+                if (data[rowIndex].str.trim() == "Page 1 of") {
+                  rowIndex += 2;
+                  console.log("PAGE 1 OF")
+                }
 
                 singleObj = {}
                 singleObj.date = data[rowIndex].str.trim()
@@ -911,9 +913,17 @@ router.post('/api/bankStatement', function (req, res) {
                 if (data[rowIndex].x < depositX) {
                   singleObj.cr = data[rowIndex].str.trim()
                   singleObj.dr = "0.00"
+                  if (data[rowIndex].str.trim().slice(-1) == '.') {
+                    rowIndex++
+                    singleObj.cr += data[rowIndex].str.trim()
+                  }
                 } else {
                   singleObj.cr = "0.00"
                   singleObj.dr = data[rowIndex].str.trim()
+                  if (data[rowIndex].str.trim().slice(-1) == '.') {
+                    rowIndex++
+                    singleObj.dr += data[rowIndex].str.trim()
+                  }
                 }
                 rowIndex++
                 singleObj.balance = data[rowIndex].str.trim()

@@ -22,7 +22,6 @@ app.use(cookieParser())
 app.use(express.static('public'))
 
 app.use(function (req, res, next) {
-  console.log("----------------------------------HERE----------------------------------")
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
