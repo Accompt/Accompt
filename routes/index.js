@@ -823,46 +823,95 @@ router.post('/api/bankStatement', function (req, res) {
                 return obj.str.trim() == "(INR)"
               })
 
-              let rowIndex = setIndex + 1
-              let assetsArray = []
-
-              while (true) {
-                singleObj = {}
-                singleObj.date = data[rowIndex].str.trim()
-                rowIndex++
-                singleObj.narr = data[rowIndex].str.trim()
-                rowIndex++
-                singleObj.chqNo = ""
-                if (data[rowIndex].str.trim().length > 3) {
-                  singleObj.chqNo = data[rowIndex].str.trim()
+              if (setIndex == -1) {
+                setIndex = _.findIndex(data, function (obj) {
+                  return obj.str.trim() == "Amount (INR)"
+                })
+                let rowIndex = setIndex + 1
+                let assetsArray = []
+                while (true) {
+                  singleObj = {}
+                  singleObj.date = data[rowIndex].str.trim()
                   rowIndex++
-                }
-                if (data[rowIndex].str.trim() == "Dr.") {
-                  singleObj.cr = data[rowIndex + 2].str.trim()
-                  singleObj.dr = "0.00"
-                } else {
-                  singleObj.cr = "0.00"
-                  singleObj.dr = data[rowIndex + 2].str.trim()
-                }
-                rowIndex += 5
-                singleObj.balance = data[rowIndex].str.trim()
-                rowIndex++
-                assetsArray.push(singleObj)
-                if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS") {
-                  if (pdfData.pages.length == 1) {
-                    break;
+                  singleObj.narr = data[rowIndex].str.trim()
+                  rowIndex++
+                  singleObj.chqNo = ""
+                  if (data[rowIndex].str.trim().length > 3) {
+                    singleObj.chqNo = data[rowIndex].str.trim()
+                    rowIndex++
+                  }
+                  if (data[rowIndex].str.trim() == "Dr.") {
+                    singleObj.cr = data[rowIndex + 2].str.trim()
+                    singleObj.dr = "0.00"
                   } else {
-                    rowIndex += 11
+                    singleObj.cr = "0.00"
+                    singleObj.dr = data[rowIndex + 2].str.trim()
+                  }
+                  rowIndex += 5
+                  singleObj.balance = data[rowIndex].str.trim()
+                  rowIndex++
+                  assetsArray.push(singleObj)
+                  if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS" || data[rowIndex].str.trim() == "YOUR A/C STATUS") {
+                    if (pdfData.pages.length == 1) {
+                      break;
+                    } else {
+                      rowIndex += 11
+                    }
+                  }
+
+                  if (data[rowIndex].str.trim() == "Page 2 of" || data[rowIndex].str.trim() == "Page 3 of") {
+                    rowIndex += 4
+                  } else if (data[rowIndex].str.trim() == "Debits") {
+                    break;
+                  }
+                  if (data[rowIndex].str.trim() == "Statement Summary:-") {
+                    break;
                   }
                 }
-                if (data[rowIndex].str.trim() == "Page 2 of" || data[rowIndex].str.trim() == "Page 3 of") {
-                  rowIndex += 4
+                resData.assetsArray = assetsArray
+              } else {
+                let rowIndex = setIndex + 1
+                let assetsArray = []
+                while (true) {
+                  singleObj = {}
+                  singleObj.date = data[rowIndex].str.trim()
+                  rowIndex++
+                  singleObj.narr = data[rowIndex].str.trim()
+                  rowIndex++
+                  singleObj.chqNo = ""
+                  if (data[rowIndex].str.trim().length > 3) {
+                    singleObj.chqNo = data[rowIndex].str.trim()
+                    rowIndex++
+                  }
+                  if (data[rowIndex].str.trim() == "Dr.") {
+                    singleObj.cr = data[rowIndex + 2].str.trim()
+                    singleObj.dr = "0.00"
+                  } else {
+                    singleObj.cr = "0.00"
+                    singleObj.dr = data[rowIndex + 2].str.trim()
+                  }
+                  rowIndex += 5
+                  singleObj.balance = data[rowIndex].str.trim()
+                  rowIndex++
+                  assetsArray.push(singleObj)
+                  if (data[rowIndex].str.trim() == "YOUR SAVINGS A/C STATUS") {
+                    if (pdfData.pages.length == 1) {
+                      break;
+                    } else {
+                      rowIndex += 11
+                    }
+                  }
+                  if (data[rowIndex].str.trim() == "Page 2 of" || data[rowIndex].str.trim() == "Page 3 of") {
+                    rowIndex += 4
+                  } else if (data[rowIndex].str.trim() == "Debits") {
+                    break;
+                  }
+                  if (data[rowIndex].str.trim() == "Statement Summary:-") {
+                    break;
+                  }
                 }
-                if (data[rowIndex].str.trim() == "Statement Summary:-") {
-                  break;
-                }
+                resData.assetsArray = assetsArray
               }
-              resData.assetsArray = assetsArray
             }
           } else if (bankType == 3) {
 
